@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Instalar Node 24
-        uses: actions/setup-node@v6
+      - name: Instalar Supabase CLI
+        uses: supabase/setup-cli@v1
         with:
-          node-version: "24"
+          version: latest
 
       - name: Criar pasta de backup
         run: mkdir -p backup
@@ -25,15 +25,15 @@ jobs:
         env:
           DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          npx supabase db dump --db-url "$DB_URL" -f backup/roles.sql --role-only
-          npx supabase db dump --db-url "$DB_URL" -f backup/schema.sql
-          npx supabase db dump --db-url "$DB_URL" -f backup/data.sql --data-only --use-copy
+          supabase db dump --db-url "$DB_URL" -f backup/roles.sql --role-only
+          supabase db dump --db-url "$DB_URL" -f backup/schema.sql
+          supabase db dump --db-url "$DB_URL" -f backup/data.sql --data-only --use-copy
 
       - name: Compactar backup
         run: tar -czf backup-supabase.tar.gz backup
 
       - name: Salvar artefato
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: backup-supabase
           path: backup-supabase.tar.gz
