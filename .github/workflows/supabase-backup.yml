@@ -29,7 +29,7 @@ jobs:
           supabase db dump --db-url "$DB_URL" -f backup/roles.sql --role-only
           supabase db dump --db-url "$DB_URL" -f backup/schema.sql
           supabase db dump --db-url "$DB_URL" -f backup/data.sql --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"
-
+          
       - name: Compactar
         run: |
           tar -czf "supabase-backup-$(date +%F-%H%M).tar.gz" backup
